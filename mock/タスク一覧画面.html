@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ToDoアプリ画面設計</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .board {
+      display: flex;
+      gap: 20px;
+    }
+
+    .column {
+      flex: 1;
+      background: #fff;
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    .column-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 10px;
+    }
+
+    .column-header h2 {
+      margin: 0;
+      font-size: 1.2em;
+    }
+
+    .add-button {
+      background-color: #3182ce;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .add-button:hover {
+      background-color: #2b6cb0;
+    }
+
+    .task {
+      background: #e2e8f0;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .task-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .task-dates {
+      font-size: 0.9em;
+      color: #555;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>ToDoボード</h1>
+  <div class="board">
+    <!-- 未着手 -->
+    <div class="column">
+      <div class="column-header">
+        <h2>未着手</h2>
+        <button class="add-button" title="タスクを追加">＋</button>
+      </div>
+      <div class="task">
+        <div class="task-title">タスクA</div>
+        <div class="task-dates">
+          開始: 2025-07-28<br>
+          期限: 2025-08-05
+        </div>
+      </div>
+      <div class="task">
+        <div class="task-title">タスクB</div>
+        <div class="task-dates">
+          開始: 2025-07-29<br>
+          期限: 2025-08-03
+        </div>
+      </div>
+    </div>
+
+    <!-- 進行中 -->
+    <div class="column">
+      <div class="column-header">
+        <h2>進行中</h2>
+        <button class="add-button" title="タスクを追加">＋</button>
+      </div>
+      <div class="task">
+        <div class="task-title">タスクC</div>
+        <div class="task-dates">
+          開始: 2025-07-25<br>
+          期限: 2025-08-01
+        </div>
+      </div>
+    </div>
+
+    <!-- 完了 -->
+    <div class="column">
+      <div class="column-header">
+        <h2>完了</h2>
+        <button class="add-button" title="タスクを追加">＋</button>
+      </div>
+      <div class="task">
+        <div class="task-title">タスクD</div>
+        <div class="task-dates">
+          開始: 2025-07-20<br>
+          期限: 2025-07-27
+        </div>
+      </div>
+      <div class="task">
+        <div class="task-title">タスクE</div>
+        <div class="task-dates">
+          開始: 2025-07-18<br>
+          期限: 2025-07-24
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

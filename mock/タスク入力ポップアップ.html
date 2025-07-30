@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>新規タスク作成ポップアップ</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      background: #f4f4f4;
+    }
+
+    /* モーダル背景 */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    /* モーダル本体 */
+    .modal {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .modal h2 {
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    textarea {
+      width: 100%;
+      padding: 8px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      height: 100px;
+      resize: vertical;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    .btn-cancel {
+      background: #aaa;
+      color: white;
+    }
+
+    .btn-create {
+      background: #3182ce;
+      color: white;
+    }
+
+    .btn-create:disabled {
+      background: #bbb;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+
+<!-- モーダルポップアップ -->
+<div class="modal-overlay">
+  <div class="modal">
+    <h2>新規タスクを作成</h2>
+
+    <form id="taskForm">
+      <div class="form-group">
+        <label for="title">タイトル <span style="color: red;">*</span></label>
+        <input type="text" id="title" name="title" required oninput="toggleSubmitButton()">
+      </div>
+
+      <div class="form-group">
+        <label for="startDate">開始日</label>
+        <input type="date" id="startDate" name="startDate">
+      </div>
+
+      <div class="form-group">
+        <label for="dueDate">期限</label>
+        <input type="date" id="dueDate" name="dueDate">
+      </div>
+
+      <div class="form-group">
+        <label for="completionCondition">完了条件</label>
+        <input type="text" id="completionCondition" name="completionCondition">
+      </div>
+
+      <div class="form-group">
+        <label for="memo">メモ</label>
+        <textarea id="memo" name="memo"></textarea>
+      </div>
+
+      <div class="button-group">
+        <button type="button" class="btn-cancel">キャンセル</button>
+        <button type="submit" class="btn-create" id="createBtn" disabled>作成</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  // タイトルが入力されていれば「作成」ボタンを有効化
+  function toggleSubmitButton() {
+    const title = document.getElementById("title").value.trim();
+    document.getElementById("createBtn").disabled = title === "";
+  }
+</script>
+
+</body>
+</html>
