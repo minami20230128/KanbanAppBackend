@@ -2,6 +2,8 @@ package com.example.demo.input;
 
 import java.time.LocalDate;
 
+import com.example.demo.entity.Status;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -18,7 +20,7 @@ public class TaskInput {
 
 	private String memo;
 
-	private Integer status;
+	private Status status;
 
 	public String getTitle() {
 		return title;
@@ -60,11 +62,11 @@ public class TaskInput {
 		this.memo = memo;
 	}
 
-	public Integer getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(Integer status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 }

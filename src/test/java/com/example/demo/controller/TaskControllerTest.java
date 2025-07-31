@@ -20,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.example.demo.entity.Status;
 import com.example.demo.entity.Task;
 import com.example.demo.input.TaskInput;
 import com.example.demo.service.TaskService;
@@ -41,7 +42,7 @@ public class TaskControllerTest {
 		Task task = new Task();
 		task.setId(1);
 		task.setTitle("Test Task");
-		task.setStatus(0);
+		task.setStatus(Status.IN_PROGRESS);
 
 		Mockito.when(taskService.findAll()).thenReturn(List.of(task));
 
@@ -55,7 +56,7 @@ public class TaskControllerTest {
 		input.setStartDate(LocalDate.now());
 		input.setDueDate(LocalDate.now().plusDays(3));
 		input.setCondition("完了条件");
-		input.setStatus(1);
+		input.setStatus(Status.TODO);
 
 		mockMvc.perform(post("/tasks/new").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(input))).andExpect(status().isOk());
@@ -88,7 +89,7 @@ public class TaskControllerTest {
 		input.setStartDate(LocalDate.now());
 		input.setDueDate(LocalDate.now().plusDays(5));
 		input.setCondition("新しい条件");
-		input.setStatus(2);
+		input.setStatus(Status.DONE);
 
 		mockMvc.perform(
 				put("/tasks/1").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(input)))
