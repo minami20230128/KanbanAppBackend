@@ -2,7 +2,7 @@ CREATE TABLE task (
   id BIGINT AUTO_INCREMENT PRIMARY KEY,
   title VARCHAR(128) NOT NULL,
   start_date DATETIME,
-  term DATETIME,
+  due_date DATETIME,
   `condition` VARCHAR(128),
   memo TEXT,
   status INT, -- 0=未着手, 1=進行中, 2=完了
