@@ -46,7 +46,7 @@ public class TaskControllerTest {
 
 		Mockito.when(taskService.findAll()).thenReturn(List.of(task));
 
-		mockMvc.perform(get("/tasks")).andExpect(status().isOk()).andExpect(jsonPath("$[0].title").value("Test Task"));
+		mockMvc.perform(get("/api/tasks")).andExpect(status().isOk()).andExpect(jsonPath("$[0].title").value("Test Task"));
 	}
 
 	@Test
@@ -58,7 +58,7 @@ public class TaskControllerTest {
 		input.setCondition("完了条件");
 		input.setStatus(Status.TODO);
 
-		mockMvc.perform(post("/tasks/new").contentType(MediaType.APPLICATION_JSON)
+		mockMvc.perform(post("/api/tasks/new").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(input))).andExpect(status().isOk());
 
 		Mockito.verify(taskService).create(any(Task.class));
@@ -72,14 +72,14 @@ public class TaskControllerTest {
 
 		Mockito.when(taskService.findById(1)).thenReturn(Optional.of(task));
 
-		mockMvc.perform(get("/tasks/1")).andExpect(status().isOk()).andExpect(jsonPath("$.title").value("Task A"));
+		mockMvc.perform(get("/api/tasks/1")).andExpect(status().isOk()).andExpect(jsonPath("$.title").value("Task A"));
 	}
 
 	@Test
 	void testGetTaskNotFound() throws Exception {
 		Mockito.when(taskService.findById(999)).thenReturn(Optional.empty());
 
-		mockMvc.perform(get("/tasks/999")).andExpect(status().isNotFound());
+		mockMvc.perform(get("/api/tasks/999")).andExpect(status().isNotFound());
 	}
 
 	@Test
@@ -92,7 +92,7 @@ public class TaskControllerTest {
 		input.setStatus(Status.DONE);
 
 		mockMvc.perform(
-				put("/tasks/1").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(input)))
+				put("/api/tasks/1").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(input)))
 				.andExpect(status().isOk());
 
 		Mockito.verify(taskService).update(eq(1), any(Task.class));

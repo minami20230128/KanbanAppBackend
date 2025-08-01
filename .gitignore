@@ -50,3 +50,4 @@ build/
 # Node / frontend (if present)
 node_modules/
 dist/
+src/main/resources/static/
