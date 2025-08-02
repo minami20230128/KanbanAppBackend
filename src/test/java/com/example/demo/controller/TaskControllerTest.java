@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -22,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.demo.entity.Status;
 import com.example.demo.entity.Task;
+import com.example.demo.input.StatusInput;
 import com.example.demo.input.TaskInput;
 import com.example.demo.service.TaskService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -93,6 +95,18 @@ public class TaskControllerTest {
 
 		mockMvc.perform(
 				put("/api/tasks/1").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(input)))
+				.andExpect(status().isOk());
+
+		Mockito.verify(taskService).update(eq(1), any(Task.class));
+	}
+	
+	@Test
+	void testEditTaskStatus() throws Exception {
+		StatusInput input = new StatusInput();
+		input.setStatus(Status.DONE);
+		
+		mockMvc.perform(
+				patch("/api/tasks/1/status").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(input)))
 				.andExpect(status().isOk());
 
 		Mockito.verify(taskService).update(eq(1), any(Task.class));

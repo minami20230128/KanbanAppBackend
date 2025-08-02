@@ -1,11 +1,12 @@
 package com.example.demo.controller;
 
-import java.util.List;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.Task;
+import com.example.demo.input.StatusInput;
 import com.example.demo.input.TaskInput;
 import com.example.demo.service.TaskService;
 
@@ -64,5 +66,10 @@ public class TaskController {
 		updatedTask.setUpdatedAt(LocalDateTime.now());
 
 		taskService.update(id, updatedTask);
+	}
+	
+	@PatchMapping("/{id}/status")
+	public void editTaskStatus(@PathVariable int id, @RequestBody StatusInput statusInput) {
+		taskService.updateStatus(id, statusInput.getStatus());
 	}
 }

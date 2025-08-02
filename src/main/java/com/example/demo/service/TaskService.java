@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.entity.Status;
 import com.example.demo.entity.Task;
 import com.example.demo.service.repository.TaskRepository;
 
@@ -38,6 +39,13 @@ public class TaskService {
 			task.setMemo(updatedTask.getMemo());
 			task.setStatus(updatedTask.getStatus());
 			task.setUpdatedAt(updatedTask.getUpdatedAt());
+			return taskRepository.save(task);
+		});
+	}
+	
+	public Optional<Task> updateStatus(int id, Status status) {
+		return taskRepository.findById(id).map(task -> {
+			task.setStatus(status);
 			return taskRepository.save(task);
 		});
 	}
