@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.TaskDto;
 import com.example.demo.entity.Task;
 import com.example.demo.input.StatusInput;
 import com.example.demo.input.TaskInput;
@@ -30,8 +31,17 @@ public class TaskController {
 	}
 
 	@GetMapping
-	public List<Task> getAllTasks() {
-		return taskService.findAll();
+	public List<TaskDto> getAllTasks() {
+	    var tasks = taskService.findAll().stream()
+	            .map(task -> new TaskDto(
+	            	task.getId(),
+	                task.getTitle(),
+	                task.getStartDate(),
+	                task.getDueDate(),
+	                task.getStatus()
+	            ))
+	            .toList();
+	    return tasks;
 	}
 
 	@PostMapping("/new")
@@ -62,7 +72,8 @@ public class TaskController {
 		updatedTask.setStartDate(taskInput.getStartDate());
 		updatedTask.setDueDate(taskInput.getDueDate());
 		updatedTask.setCondition(taskInput.getCondition());
-		updatedTask.setStatus(taskInput.getStatus());
+		updatedTask.setMemo(taskInput.getMemo());
+		//updatedTask.setStatus(taskInput.getStatus());
 		updatedTask.setUpdatedAt(LocalDateTime.now());
 
 		taskService.update(id, updatedTask);

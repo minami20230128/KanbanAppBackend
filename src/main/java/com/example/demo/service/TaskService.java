@@ -37,7 +37,6 @@ public class TaskService {
 			task.setDueDate(updatedTask.getDueDate());
 			task.setCondition(updatedTask.getCondition());
 			task.setMemo(updatedTask.getMemo());
-			task.setStatus(updatedTask.getStatus());
 			task.setUpdatedAt(updatedTask.getUpdatedAt());
 			return taskRepository.save(task);
 		});
