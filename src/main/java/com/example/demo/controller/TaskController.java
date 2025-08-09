@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.TaskDto;
+import com.example.demo.entity.Status;
 import com.example.demo.entity.Task;
 import com.example.demo.input.StatusInput;
 import com.example.demo.input.TaskInput;
@@ -51,6 +52,7 @@ public class TaskController {
 		newTask.setStartDate(taskInput.getStartDate());
 		newTask.setDueDate(taskInput.getDueDate());
 		newTask.setCondition(taskInput.getCondition());
+		newTask.setMemo(taskInput.getMemo());
 		newTask.setStatus(taskInput.getStatus());
 		newTask.setCreatedAt(LocalDateTime.now());
 
