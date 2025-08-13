@@ -109,6 +109,6 @@ public class TaskControllerTest {
 				patch("/api/tasks/1/status").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(input)))
 				.andExpect(status().isOk());
 
-		Mockito.verify(taskService).update(eq(1), any(Task.class));
+		Mockito.verify(taskService).updateStatus(eq(1), eq(Status.DONE));
 	}
 }
