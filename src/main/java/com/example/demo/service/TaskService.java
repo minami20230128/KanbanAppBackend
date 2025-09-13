@@ -9,6 +9,8 @@ import com.example.demo.entity.Status;
 import com.example.demo.entity.Task;
 import com.example.demo.repository.TaskRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class TaskService {
 
@@ -47,5 +49,11 @@ public class TaskService {
 			task.setStatus(status);
 			return taskRepository.save(task);
 		});
+	}
+	
+	public void delete(int id) {
+		var task = taskRepository.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException("タスクが見つかりません: " + id));
+        taskRepository.delete(task);
 	}
 }

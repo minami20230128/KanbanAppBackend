@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -83,5 +84,11 @@ public class TaskController {
 	@PatchMapping("/{id}/status")
 	public void editTaskStatus(@PathVariable int id, @RequestBody StatusInput statusInput) {
 		taskService.updateStatus(id, statusInput.getStatus());
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deleteTask(@PathVariable int id) {
+		taskService.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 }
