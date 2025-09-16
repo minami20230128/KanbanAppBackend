@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -110,5 +111,13 @@ public class TaskControllerTest {
 				.andExpect(status().isOk());
 
 		Mockito.verify(taskService).updateStatus(eq(1), eq(Status.DONE));
+	}
+	
+	@Test
+	void testDeleteTask() throws Exception {
+		mockMvc.perform(delete("/api/tasks/1"))
+				.andExpect(status().isNoContent());
+
+		Mockito.verify(taskService).delete(1);
 	}
 }
