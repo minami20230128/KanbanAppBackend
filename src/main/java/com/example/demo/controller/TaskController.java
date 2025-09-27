@@ -3,23 +3,29 @@ package com.example.demo.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.dto.TaskDto;
 import com.example.demo.entity.Task;
 import com.example.demo.input.StatusInput;
 import com.example.demo.input.TaskInput;
 import com.example.demo.service.TaskService;
+
+import jakarta.persistence.OptimisticLockException;
 
 @RestController
 @RequestMapping("/api/tasks")
@@ -68,17 +74,16 @@ public class TaskController {
 	}
 
 	@PutMapping("/{id}")
-	public void editTask(@PathVariable int id, @RequestBody TaskInput taskInput) {
-		var updatedTask = new Task();
-		updatedTask.setTitle(taskInput.getTitle());
-		updatedTask.setStartDate(taskInput.getStartDate());
-		updatedTask.setDueDate(taskInput.getDueDate());
-		updatedTask.setCondition(taskInput.getCondition());
-		updatedTask.setMemo(taskInput.getMemo());
-		//updatedTask.setStatus(taskInput.getStatus());
-		updatedTask.setUpdatedAt(LocalDateTime.now());
-
-		taskService.update(id, updatedTask);
+	public void editTask(@PathVariable int id, @Validated @RequestBody TaskInput taskInput) {
+	    try {
+		    taskService.update(id, taskInput);
+		}
+		catch(OptimisticLockException e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT);
+		}
+	    catch(OptimisticLockingFailureException e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT);
+		}
 	}
 	
 	@PatchMapping("/{id}/status")

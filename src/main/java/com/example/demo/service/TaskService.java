@@ -1,12 +1,16 @@
 package com.example.demo.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.entity.Status;
 import com.example.demo.entity.Task;
+import com.example.demo.input.TaskInput;
 import com.example.demo.repository.TaskRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -32,17 +36,20 @@ public class TaskService {
 		return taskRepository.findById(id);
 	}
 
-	public Optional<Task> update(Integer id, Task updatedTask) {
-		return taskRepository.findById(id).map(task -> {
-			task.setTitle(updatedTask.getTitle());
-			task.setStartDate(updatedTask.getStartDate());
-			task.setDueDate(updatedTask.getDueDate());
-			task.setCondition(updatedTask.getCondition());
-			task.setMemo(updatedTask.getMemo());
-			task.setUpdatedAt(updatedTask.getUpdatedAt());
-			return taskRepository.save(task);
-		});
+	@Transactional
+	public Task update(int id, TaskInput input) {
+	    Task task = taskRepository.findById(id)
+	        .orElseThrow(() -> new ResourceNotFoundException("Task not found: " + id));
+	    
+	    task.setTitle(input.getTitle());
+	    task.setStartDate(input.getStartDate());
+	    task.setDueDate(input.getDueDate());
+	    task.setCondition(input.getCondition());
+	    task.setMemo(input.getMemo());
+	    task.setUpdatedAt(LocalDateTime.now());
+	    return taskRepository.save(task);
 	}
+
 	
 	public Optional<Task> updateStatus(int id, Status status) {
 		return taskRepository.findById(id).map(task -> {

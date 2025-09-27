@@ -98,7 +98,7 @@ public class TaskControllerTest {
 				put("/api/tasks/1").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(input)))
 				.andExpect(status().isOk());
 
-		Mockito.verify(taskService).update(eq(1), any(Task.class));
+		Mockito.verify(taskService).update(eq(1), any(TaskInput.class));
 	}
 	
 	@Test
