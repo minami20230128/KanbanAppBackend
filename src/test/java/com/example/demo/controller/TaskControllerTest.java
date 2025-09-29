@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.example.demo.entity.Status;
 import com.example.demo.entity.Task;
+import com.example.demo.input.DeleteInput;
 import com.example.demo.input.StatusInput;
 import com.example.demo.input.TaskInput;
 import com.example.demo.service.TaskService;
@@ -105,19 +106,23 @@ public class TaskControllerTest {
 	void testEditTaskStatus() throws Exception {
 		StatusInput input = new StatusInput();
 		input.setStatus(Status.DONE);
+		input.setVersion(1L);
 		
 		mockMvc.perform(
 				patch("/api/tasks/1/status").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(input)))
 				.andExpect(status().isOk());
 
-		Mockito.verify(taskService).updateStatus(eq(1), eq(Status.DONE));
+		Mockito.verify(taskService).updateStatus(eq(1), eq(Status.DONE), eq(1L));
 	}
 	
 	@Test
 	void testDeleteTask() throws Exception {
-		mockMvc.perform(delete("/api/tasks/1"))
+		DeleteInput input = new DeleteInput();
+		input.setVersion(1L);
+		
+		mockMvc.perform(delete("/api/tasks/1").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(input)))
 				.andExpect(status().isNoContent());
 
-		Mockito.verify(taskService).delete(1);
+		Mockito.verify(taskService).delete(1, 1L);
 	}
 }

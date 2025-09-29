@@ -6,6 +6,7 @@ import com.example.demo.entity.Status;
 
 public class TaskDto {
 	private int id;
+	private Long version;
     private String title;
     private LocalDate startDate;
     private LocalDate dueDate;
@@ -27,7 +28,15 @@ public class TaskDto {
 		this.id = id;
 	}
 
-    public String getTitle() {
+    public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
+
+	public String getTitle() {
 		return title;
 	}
 

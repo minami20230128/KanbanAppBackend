@@ -11,6 +11,8 @@ public class TaskInput {
 	@NotBlank
 	@Size(max = 128)
 	private String title;
+	
+	private Long version;
 
 	private LocalDate startDate;
 
@@ -28,6 +30,14 @@ public class TaskInput {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
 	}
 
 	public LocalDate getStartDate() {

@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.dao.OptimisticLockingFailureException;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.demo.dto.TaskDto;
 import com.example.demo.entity.Task;
+import com.example.demo.input.DeleteInput;
 import com.example.demo.input.StatusInput;
 import com.example.demo.input.TaskInput;
 import com.example.demo.service.TaskService;
@@ -87,13 +87,29 @@ public class TaskController {
 	}
 	
 	@PatchMapping("/{id}/status")
-	public void editTaskStatus(@PathVariable int id, @RequestBody StatusInput statusInput) {
-		taskService.updateStatus(id, statusInput.getStatus());
+	public void editTaskStatus(@PathVariable int id, @Validated @RequestBody StatusInput statusInput) {
+		try {
+			taskService.updateStatus(id, statusInput.getStatus(), statusInput.getVersion());
+		}
+		catch(OptimisticLockException e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT);
+		}
+	    catch(OptimisticLockingFailureException e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT);
+		}
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteTask(@PathVariable int id) {
-		taskService.delete(id);
-		return ResponseEntity.noContent().build();
+	public ResponseEntity<Void> deleteTask(@PathVariable int id, @Validated @RequestBody DeleteInput deleteInput) {
+		try {
+			taskService.delete(id, deleteInput.getVersion());
+			return ResponseEntity.noContent().build();
+		}
+		catch(OptimisticLockException e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT);
+		}
+	    catch(OptimisticLockingFailureException e) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT);
+		}
 	}
 }

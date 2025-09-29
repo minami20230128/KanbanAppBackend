@@ -14,6 +14,7 @@ import com.example.demo.input.TaskInput;
 import com.example.demo.repository.TaskRepository;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.OptimisticLockException;
 
 @Service
 public class TaskService {
@@ -41,6 +42,12 @@ public class TaskService {
 	    Task task = taskRepository.findById(id)
 	        .orElseThrow(() -> new ResourceNotFoundException("Task not found: " + id));
 	    
+	 // バージョンを比較
+	    if (!task.getVersion().equals(input.getVersion())) {
+	        throw new OptimisticLockException("version mismatch: expected=" 
+	                                          + input.getVersion() + " actual=" + task.getVersion());
+	    }
+	    
 	    task.setTitle(input.getTitle());
 	    task.setStartDate(input.getStartDate());
 	    task.setDueDate(input.getDueDate());
@@ -51,16 +58,32 @@ public class TaskService {
 	}
 
 	
-	public Optional<Task> updateStatus(int id, Status status) {
-		return taskRepository.findById(id).map(task -> {
-			task.setStatus(status);
-			return taskRepository.save(task);
-		});
+	@Transactional
+	public Task updateStatus(int id, Status status, Long version) {
+	    Task task = taskRepository.findById(id)
+	        .orElseThrow(() -> new EntityNotFoundException("タスクが見つかりません: " + id));
+
+	    // バージョンを比較
+	    if (!task.getVersion().equals(version)) {
+	        throw new OptimisticLockException("version mismatch: expected=" 
+	                                          + version + " actual=" + task.getVersion());
+	    }
+
+	    task.setStatus(status);
+	    return taskRepository.save(task); // 保存時に version が自動で +1 される
 	}
 	
-	public void delete(int id) {
-		var task = taskRepository.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException("タスクが見つかりません: " + id));
-        taskRepository.delete(task);
+	@Transactional
+	public void delete(int id, Long version) {
+	    Task task = taskRepository.findById(id)
+	        .orElseThrow(() -> new EntityNotFoundException("タスクが見つかりません: " + id));
+
+	    // バージョンを比較
+	    if (!task.getVersion().equals(version)) {
+	        throw new OptimisticLockException("version mismatch: expected=" 
+	                                          + version + " actual=" + task.getVersion());
+	    }
+
+	    taskRepository.delete(task); // 削除時も version チェックが効く
 	}
 }
