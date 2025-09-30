@@ -63,6 +63,9 @@ public class TaskService {
 	    Task task = taskRepository.findById(id)
 	        .orElseThrow(() -> new EntityNotFoundException("タスクが見つかりません: " + id));
 
+	    System.out.println(version);
+	    System.out.println(task.getVersion());
+	    
 	    // バージョンを比較
 	    if (!task.getVersion().equals(version)) {
 	        throw new OptimisticLockException("version mismatch: expected=" 
@@ -77,6 +80,9 @@ public class TaskService {
 	public void delete(int id, Long version) {
 	    Task task = taskRepository.findById(id)
 	        .orElseThrow(() -> new EntityNotFoundException("タスクが見つかりません: " + id));
+	    
+	    System.out.println(version);
+	    System.out.println(task.getVersion());
 
 	    // バージョンを比較
 	    if (!task.getVersion().equals(version)) {

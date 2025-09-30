@@ -12,8 +12,9 @@ public class TaskDto {
     private LocalDate dueDate;
     private Status status;
     
-	public TaskDto(int id, String title, LocalDate startDate, LocalDate dueDate, Status status) {
+	public TaskDto(int id, Long version, String title, LocalDate startDate, LocalDate dueDate, Status status) {
 		this.id = id;
+		this.version = version;
         this.title = title;
         this.startDate = startDate;
         this.dueDate = dueDate;

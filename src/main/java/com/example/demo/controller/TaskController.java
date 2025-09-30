@@ -42,6 +42,7 @@ public class TaskController {
 	    var tasks = taskService.findAll().stream()
 	            .map(task -> new TaskDto(
 	            	task.getId(),
+	            	task.getVersion(),
 	                task.getTitle(),
 	                task.getStartDate(),
 	                task.getDueDate(),
@@ -54,6 +55,7 @@ public class TaskController {
 	@PostMapping("/new")
 	public ResponseEntity<Void> saveNewTask(@Validated @RequestBody TaskInput taskInput) {
 		var newTask = new Task();
+		newTask.setVersion(0L);
 		newTask.setTitle(taskInput.getTitle());
 		newTask.setStartDate(taskInput.getStartDate());
 		newTask.setDueDate(taskInput.getDueDate());
